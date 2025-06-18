@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediction Result</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2, h3 { color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 10px; text-align: left; }
+    .section { margin-top: 30px; }
+    .ai-text { background: #f9f9f9; border: 1px solid #ccc; padding: 15px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="result-container">
+    <h2>Cardiac Disease Detection Result</h2>
+    <p>Your prediction result: <strong>{{ prediction }}</strong></p>
+
+    <div class="section">
+      <h2>Medical Parameter Comparison</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Medical Parameter</th>
+            <th>Patient Value</th>
+            <th>Normal Range / Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>Recommended Wearable Target Ranges</h3>
+      <p class="ai-text" id="wearable-text">
+        <!-- Filled by JS -->
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>Condition Explanation and Lifestyle Suggestion</h3>
+      <p id="condition-explanation"></p>
+    </div>
+
+    <a href="/">Go Back</a>
+  </div>
+
+  <script>
+    function populateReport() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const result = urlParams.get('result');
+      const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+
+      // Show prediction result
+      document.querySelector('p strong').innerText = result;
+
+      // Fill the table
+      const fields = {
+        cp: "Chest Pain Type",
+        trestbps: "Resting Blood Pressure (mm Hg)",
+        chol: "Cholesterol (mg/dl)",
+        fbs: "Fasting Blood Sugar > 120 mg/dl",
+        restecg: "Resting ECG Result",
+        thalach: "Max Heart Rate Achieved",
+        exang: "Exercise-Induced Angina",
+        oldpeak: "ST Depression (oldpeak)",
+        slope: "Slope of ECG Peak",
+        ca: "Major Vessels Colored",
+        thal: "Thalassemia Status"
+      };
+
+      const interpretations = {
+        cp: "0 or 1",
+        trestbps: "90 – 120",
+        chol:  "Below 200",
+        fbs: "0",
+        restecg: "0",
+        thalach: "100 – 170 (age dependent)",
+        exang: "0",
+        oldpeak: "0 – 1.0",
+        slope: "0",
+        ca: "0 – 1",
+        thal: "0"
+      };
+
+      const tbody = document.querySelector("table tbody");
+      tbody.innerHTML = "";
+
+      for (const [key, label] of Object.entries(fields)) {
+        const row = document.createElement("tr");
+        const interpretation = typeof interpretations[key] === "function" 
+                           ? interpretations[key](data[key]) 
+                           : interpretations[key];
+
+        row.innerHTML = `
+          <td>${label}</td>
+          <td>${data[key] ?? "N/A"}</td>
+          <td>${interpretation}</td>
+        `;
+        tbody.appendChild(row);
+      }
+
+      // Dynamically generate wearable recommendations
+      let hrRange = "60 - 100 bpm (resting)";
+      let bpRange = "110/70 - 120/80 mmHg";
+      let steps = "≥ 8,000 steps/day";
+      let sleep = "7-8 hours/night";
+
+      const bp = parseInt(data.trestbps);
+      const thalach = parseInt(data.thalach);
+
+      if (!isNaN(bp)) {
+        if (bp > 130) bpRange = "Target: < 120/80 mmHg";
+        else if (bp < 90) bpRange = "Target: > 100/70 mmHg";
+      }
+
+      if (!isNaN(thalach)) {
+        if (thalach > 170) hrRange = "Target: < 160 bpm (resting)";
+        else if (thalach < 60) hrRange = "Target: > 70 bpm (resting)";
+      }
+
+      document.getElementById("wearable-text").innerHTML = ` 
+        Heart Rate: ${hrRange} <br>
+        Blood Pressure: ${bpRange} <br>
+        Daily Steps: ${steps} <br>
+        Sleep: ${sleep}
+      `;
+
+      // Add logic for heart disease prediction
+      const prediction = predictHeartDisease(data);
+      document.querySelector('p strong').innerText = prediction;
+
+      // Add condition explanation
+      const explanation = getConditionExplanation(prediction);
+      const explanationElement = document.createElement('p');
+      explanationElement.textContent = explanation;
+      document.getElementById("condition-explanation").appendChild(explanationElement);
+    }
+
+    function predictHeartDisease(data) {
+      // Simple logic to predict based on medical parameters
+      const { cp, trestbps, chol, thalach, oldpeak } = data;
+
+      let risk = "Low Risk";
+
+      // Chest pain type (cp)
+      if (cp === "1" || cp === "2") risk = "Moderate Risk";
+      if (cp === "3") risk = "High Risk";
+
+      // Blood Pressure (trestbps)
+      if (parseInt(trestbps) > 130) risk = "High Risk";
+
+      // Cholesterol (chol)
+      if (parseInt(chol) > 240) risk = "High Risk";
+
+      // Max Heart Rate Achieved (thalach)
+      if (parseInt(thalach) < 60) risk = "Moderate Risk";
+
+      // ST Depression (oldpeak)
+      if (parseFloat(oldpeak) > 1.0) risk = "High Risk";
+
+      return risk;
+    }
+
+    function getConditionExplanation(prediction) {
+      let explanation = "";
+      switch (prediction) {
+        case "Low Risk":
+          explanation = "Your current health condition suggests a low likelihood of cardiac disease. However, it is still important to maintain a healthy lifestyle by eating a balanced diet, exercising regularly, and keeping an eye on your health. Regular check-ups with your doctor are recommended to keep things on track.";
+          break;
+        case "Moderate Risk":
+          explanation = "Based on your current data, there is a moderate risk for heart disease. While you're not at immediate danger, it’s important to be cautious. I recommend speaking with a healthcare provider to discuss lifestyle changes, such as improving your diet, increasing physical activity, and managing stress. Early intervention can help prevent any potential issues down the line.";
+          break;
+        case "High Risk":
+          explanation = "Your results indicate a higher risk for heart disease. I strongly recommend that you schedule an appointment with a healthcare professional as soon as possible for further tests and potential treatment options. In the meantime, focus on minimizing risk factors, such as managing your blood pressure, cholesterol levels, and heart rate, and engaging in regular physical activity.";
+          break;
+        default:
+          explanation = "We couldn’t determine your health condition based on the data available. Please reach out to your doctor for a thorough evaluation to ensure your health is properly monitored.";
+      }
+      return explanation;
+    }
+
+    window.onload = populateReport;
+  </script>
+</body>
+</html>

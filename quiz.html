@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cardiac Health Assessment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Cardiac Health Assessment Questionnaire</h2>
+    
+
+    <form id="quizForm" action="/submit" method="POST">
+      
+      <!-- Basic Information -->
+      <h3>Basic Information</h3>
+      <div class="question">
+        <p>1) What is your age? (in years)</p>
+        <input type="number" name="age" required />
+      </div>
+
+      <div class="question">
+        <p>2) What is your biological sex?</p>
+        <label><input type="radio" name="sex" value="1" required /> Male</label>
+        <label><input type="radio" name="sex" value="0" /> Female</label>
+      </div>
+
+      <!-- Medical Questions from Dataset 1 -->
+      <h3>Medical Information</h3>
+      <div class="question">
+        <p>3) What type of chest pain do you experience?</p>
+        <select name="cp" required>
+          <option value="0">Typical Angina (during exertion/stress)</option>
+          <option value="1">Atypical Angina (not clearly related to activity)</option>
+          <option value="2">Non-anginal pain (unrelated to heart)</option>
+          <option value="3">No chest pain</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <p>4) What is your resting blood pressure? (in mm Hg)</p>
+        <small>Example: 120</small><br />
+        <input type="number" name="trestbps" required />
+      </div>
+
+      <div class="question">
+        <p>5) What is your total cholesterol level? (in mg/dl)</p>
+        <small>Refer to your recent blood test report</small><br />
+        <input type="number" name="chol" required />
+      </div>
+
+      <div class="question">
+        <p>6) Is your fasting blood sugar higher than 120 mg/dl?</p>
+        <label><input type="radio" name="fbs" value="1" required /> Yes</label>
+        <label><input type="radio" name="fbs" value="0" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>7) What is your resting ECG result?</p>
+        <select name="restecg" required>
+          <option value="0">Normal</option>
+          <option value="1">ST-T abnormality</option>
+          <option value="2">Left ventricular hypertrophy</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <p>8) What is your maximum heart rate achieved during exercise?</p>
+        <input type="number" name="thalach" required />
+      </div>
+
+      <div class="question">
+        <p>9) Do you experience chest pain (angina) during physical activity?</p>
+        <label><input type="radio" name="exang" value="1" required /> Yes</label>
+        <label><input type="radio" name="exang" value="0" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>10) ST segment depression during exercise, if known</p>
+        <small>Leave blank if unknown. Example: 1.2</small><br />
+        <input type="number" step="0.1" name="oldpeak" />
+      </div>
+
+      <div class="question">
+        <p>11) Slope of the peak exercise ST segment</p>
+        <select name="slope" required>
+          <option value="0">Upsloping</option>
+          <option value="1">Flat</option>
+          <option value="2">Downsloping</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <p>12) Number of major blood vessels colored by fluoroscopy (0–3)</p>
+        <input type="number" name="ca" min="0" max="3" required />
+      </div>
+
+      <div class="question">
+        <p>13) Thalassemia status (if known)</p>
+        <select name="thal" required>
+          <option value="1">Normal</option>
+          <option value="2">Fixed defect</option>
+          <option value="3">Reversible defect</option>
+        </select>
+      </div>
+
+      <!-- Lifestyle & Symptom Questions from Dataset 2 -->
+      <h3>Symptoms & Lifestyle</h3>
+      <div class="question">
+        <p>14) Do you experience chest pain?</p>
+        <label><input type="radio" name="Chest_Pain" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Chest_Pain" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>15) Do you have shortness of breath?</p>
+        <label><input type="radio" name="Shortness_of_Breath" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Shortness_of_Breath" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>16) Do you often feel tired or fatigued?</p>
+        <label><input type="radio" name="Fatigue" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Fatigue" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>17) Have you felt your heart skipping or racing (palpitations)?</p>
+        <label><input type="radio" name="Palpitations" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Palpitations" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>18) Do you often feel dizzy?</p>
+        <label><input type="radio" name="Dizziness" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Dizziness" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>19) Have you noticed swelling in your legs, ankles, or feet?</p>
+        <label><input type="radio" name="Swelling" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Swelling" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>20) Do you have pain in your arms, jaw, or back?</p>
+        <label><input type="radio" name="Pain_Arms_Jaw_Back" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Pain_Arms_Jaw_Back" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>21) Do you get cold sweats or nausea suddenly?</p>
+        <label><input type="radio" name="Cold_Sweats_Nausea" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Cold_Sweats_Nausea" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>22) Have you been diagnosed with high blood pressure?</p>
+        <label><input type="radio" name="High_BP" value="yes" required /> Yes</label>
+        <label><input type="radio" name="High_BP" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>23) Have you been diagnosed with high cholesterol?</p>
+        <label><input type="radio" name="High_Cholesterol" value="yes" required /> Yes</label>
+        <label><input type="radio" name="High_Cholesterol" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>24) Are you diabetic?</p>
+        <label><input type="radio" name="Diabetes" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Diabetes" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>25) Do you smoke or have a history of smoking?</p>
+        <label><input type="radio" name="Smoking" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Smoking" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>26) Is your BMI ≥ 30 (obese)?</p>
+        <label><input type="radio" name="Obesity" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Obesity" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>27) Do you live a sedentary lifestyle (little to no physical activity)?</p>
+        <label><input type="radio" name="Sedentary_Lifestyle" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Sedentary_Lifestyle" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>28) Do you have a family history of heart disease?</p>
+        <label><input type="radio" name="Family_History" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Family_History" value="no" /> No</label>
+      </div>
+
+      <div class="question">
+        <p>29) Are you under chronic stress?</p>
+        <label><input type="radio" name="Chronic_Stress" value="yes" required /> Yes</label>
+        <label><input type="radio" name="Chronic_Stress" value="no" /> No</label>
+      </div>
+
+      <button type="submit">Submit</button>
+      <button type="button" onclick="fillDefaults()">Fill Default Values</button>
+    </form>
+  </div>
+  <script>
+    function fillDefaults() {
+  const form = document.getElementById("quizForm");
+  
+  // Setting some default values
+  form.age.value = 45;
+  form.sex.value = "1"; // Male
+  form.cp.value = "0"; // Typical Angina
+  form.trestbps.value = 130;
+  form.chol.value = 250;
+  form.fbs.value = "0"; // No
+  form.restecg.value = "1"; // ST-T abnormality
+  form.thalach.value = 160;
+  form.exang.value = "0"; // No
+  form.oldpeak.value = 1.2;
+  form.slope.value = "1"; // Flat
+  form.ca.value = 1;
+  form.thal.value = "2"; // Fixed defect
+  
+  // Symptoms & Lifestyle (yes/no)
+  const defaultAnswers = {
+    "Chest_Pain": "no",
+    "Shortness_of_Breath": "no",
+    "Fatigue": "no",
+    "Palpitations": "yes",
+    "Dizziness": "no",
+    "Swelling": "yes",
+    "Pain_Arms_Jaw_Back": "yes",
+    "Cold_Sweats_Nausea": "yes",
+    "High_BP": "no",
+    "High_Cholesterol": "yes",
+    "Diabetes": "yes",
+    "Smoking": "yes",
+    "Obesity": "no",
+    "Sedentary_Lifestyle": "yes",
+    "Family_History": "no",
+    "Chronic_Stress": "no"
+  };
+
+  // Loop through all the fields and select the default answer
+  for (let name in defaultAnswers) {
+    const value = defaultAnswers[name];
+    const radios = form.querySelectorAll(`input[name="${name}"]`);
+    
+    // Find the radio button that matches the value and check it
+    radios.forEach(radio => {
+      if (radio.value === value) {
+        radio.checked = true;
+      }
+    });
+  }
+}
+
+
+  </script>
+  
+
+  
+  
+
+  
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cardiac Disease Detection</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // JavaScript to handle login logic
+    function handleLogin(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Hardcoded username and password (you can change this to more complex logic later)
+      const validUsername = 'us';
+      const validPassword = 'ss';
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Check if the credentials are correct
+      if (username === validUsername && password === validPassword) {
+        // Redirect to the quiz page
+        window.location.href = 'quiz.html';
+      } else {
+        alert('Invalid username or password. Please try again.');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Cardiac Health Check</h2>
+    <p>Please log in to begin the test</p>
+
+    <!-- User Login Form -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter Username" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password" required />
+
+      <button type="submit">Log In</button>
+    </form>
+  </div>
+</body>
+</html>
